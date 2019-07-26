@@ -1,0 +1,35 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+onChipRam        0x0000000000000000 0x0000000000002000 w !xr
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD build/src/crt.o
+LOAD /riscv/newlib/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a
+START GROUP
+LOAD /riscv/newlib/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libc.a
+LOAD /riscv/newlib/lib/gcc/riscv32-unknown-elf/8.3.0/../../../../riscv32-unknown-elf/lib/libgloss.a
+END GROUP
+LOAD /riscv/newlib/lib/gcc/riscv32-unknown-elf/8.3.0/libgcc.a
+                0x0000000000000000                . = 0x0
+
+.crt_section    0x0000000000000000       0xa4
+                0x0000000000000000                . = ALIGN (0x4)
+ *crt.o(.text)
+ .text          0x0000000000000000       0xa4 build/src/crt.o
+                0x0000000000000000                _start
+OUTPUT(build/in_place_add.elf elf32-littleriscv)
+
+.data           0x00000000000000a4        0x0
+ .data          0x00000000000000a4        0x0 build/src/crt.o
+
+.bss            0x00000000000000a4        0x0
+ .bss           0x00000000000000a4        0x0 build/src/crt.o
+
+.riscv.attributes
+                0x0000000000000000       0x1a
+ .riscv.attributes
+                0x0000000000000000       0x1a build/src/crt.o
